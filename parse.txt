@@ -1,0 +1,63 @@
+----------
+Command: ls
+Inputs: 
+Option: -l
+Redirection: >
+Background: y
+----------
+----------
+Command: wc
+Inputs: output1.txt
+Option: 
+Redirection: -
+Background: n
+----------
+----------
+Command: ls
+Inputs: 
+Option: -a
+Redirection: -
+Background: n
+----------
+----------
+Command: man
+Inputs: 
+Option: -f
+Redirection: -
+Background: n
+----------
+----------
+Command: grep
+Inputs: sample
+Option: 
+Redirection: <
+Background: n
+----------
+----------
+Command: ls
+Inputs: −l
+Option: 
+Redirection: >
+Background: y
+----------
+----------
+Command: man
+Inputs: cat
+Option: 
+Redirection: -
+Background: n
+----------
+----------
+Command: grep
+Inputs: rwx
+Option: 
+Redirection: <
+Background: y
+----------
+----------
+Command: wait
+Inputs: 
+Option: 
+Redirection: -
+Background: n
+----------

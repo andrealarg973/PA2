@@ -1,0 +1,9 @@
+ls -l > output1.txt &
+wc output1.txt
+ls -a
+man -f grep
+grep sample −i < cs.txt
+ls −l > out1.txt &
+man cat
+grep rwx < out1.txt &
+wait
