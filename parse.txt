@@ -1,28 +1,28 @@
 ----------
-Command: ls
-Inputs: 
-Option: -l
-Redirection: >
-Background: n
-----------
-----------
 Command: grep
-Inputs: command
+Inputs: danger
 Option: 
 Redirection: <
 Background: n
 ----------
 ----------
+Command: ls
+Inputs: 
+Option: -a
+Redirection: -
+Background: n
+----------
+----------
 Command: wc
-Inputs: commands.txt
+Inputs: cli1.c
 Option: 
 Redirection: >
 Background: n
 ----------
 ----------
 Command: grep
-Inputs: command
-Option: 
+Inputs: clearly
+Option: -i
 Redirection: <
 Background: n
 ----------
