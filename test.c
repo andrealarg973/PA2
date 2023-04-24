@@ -1,16 +1,16 @@
 #include <string.h>
 #include <stdio.h>
 
+void edit(char **args) {
+   args[0] = strdup("ciao");
+   args[1] = NULL;
+}
+
 int main () {
-   char str[80] = "This is - www.tutorialspoint.com - website";
-   const char s[2] = "-";
-   //char *token[];
-   //token = char[10];
-   int n;
-   printf("%d", n);
-   //printf("%d", token[0]);
-   
-   return(0);
+   char *myargs[3];
+   edit(myargs);
+   printf("%s\n", myargs[0]);
+   return 0;
 }
 /*
 // put all the commands into a buffer

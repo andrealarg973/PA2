@@ -188,7 +188,7 @@ int main(int argc, char *argv[]) {
         //printf("%s\n",buffer);
         //printf("count: %d\n", command_count);
         parseCommand(buffer, parse_file, &command_list[command_count]);
-        //print_command(&command_list[command_count]);
+        print_command(&command_list[command_count]);
         //print_command(&command_list[0]);
         command_count++;
 

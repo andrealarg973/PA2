@@ -1,1 +1,4 @@
-ls -l > output1.txt &
+ls -l > output.txt
+grep command < output.txt
+wc commands.txt > output.txt
+grep command < output.txt

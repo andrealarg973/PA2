@@ -4,7 +4,7 @@
 #include <string.h>
 #include <fcntl.h>
 #include <assert.h>
-//#include <sys/wait.h>
+#include <sys/wait.h>
 #define BUFSIZE 1024
 #define MAX_COMMANDS 15
 
@@ -171,12 +171,46 @@ void parseCommand(char* command, FILE *parse_file, struct command *command_list)
     
 }
 
+void insert_parameters(char **myargs, struct command *command) {
+    // 1.1.4 basic execution 
+    if(command->isBackground == 0) {    //  && command->isRedirection == 0
+        // can just call execvp and execute
+        myargs[0] = strdup(command->name);
+        if(command->isInput == 1) {
+            myargs[1] = strdup(command->input);
+            if(command->isOption == 1) {
+                myargs[2] = strdup(command->option);
+                myargs[3] = NULL;
+            } else {
+                myargs[2] = NULL;
+            }
+        } else {
+            if(command->isOption == 1) {
+                myargs[1] = strdup(command->option);
+                myargs[2] = NULL;
+            } else {
+                myargs[1] = NULL;
+            }
+        }
+    }
+    
+
+
+
+}
+
 int main(int argc, char *argv[]) {
     FILE *commands_file, *parse_file;
     char buffer[BUFSIZE];
     int n;
     char *token;
     struct command command_list[MAX_COMMANDS];
+    // fd[0]: read
+    // fd[1]: write
+    int fd[2];
+    pipe(fd);
+    int stdin_fd = dup(STDIN_FILENO);
+    int stdout_fd = dup(STDOUT_FILENO);
 
     commands_file = fopen("commands1.txt", "r");
     parse_file = fopen("parse.txt", "w");
@@ -189,15 +223,44 @@ int main(int argc, char *argv[]) {
 
         // parse new command
         parseCommand(buffer, parse_file, &command_list[command_count]);
+        //print_command(&command_list[command_count]);
         // create new process for the command
-        //rc = fork();
+        rc = fork();
 
-        /*if (rc < 0) {
+        if (rc < 0) {
             // fork failed; exit
             fprintf(stderr, "fork failed\n");
             exit(1);
         } else if (rc == 0) { // command execution
-        */
+            //printf("Command: %s\n", command_list[command_count].name);
+            // 1.1.5 implementing redirectioning
+            if (command_list[command_count].isRedirection == 1) {
+                // wc commands.txt > output.txt
+                //printf("red_file: %s\n", command_list[command_count].redirection_file);
+                //printf("CHAR: %c\n", command_list[command_count].redirection[0]);
+                if (command_list[command_count].redirection[0] == '>') {
+                    //printf("Redirection: >, %s\n", command_list[command_count].redirection_file);
+                    int new_stdout = open(command_list[command_count].redirection_file, O_CREAT|O_WRONLY|O_TRUNC, S_IRWXU); // open output file
+                    dup2(new_stdout, STDOUT_FILENO); // redirect output to file
+                    //close(new_stdout);
+                } else if (command_list[command_count].redirection[0] == '<'){
+                    //printf("Redirection: <, %s\n", command_list[command_count].redirection_file);
+                    int new_stdin = open(command_list[command_count].redirection_file, O_RDONLY); // open input file
+                    dup2(new_stdin, STDIN_FILENO); // redirect input to file
+                    //close(new_stdin);
+                }
+            }
+            char *myargs[10];
+            insert_parameters(myargs, &command_list[command_count]);
+            //printf("Args: %s\n", command_list[command_count].redirection_file);
+            execvp(myargs[0], myargs);
+        } else { // shell
+            if (command_list[command_count].isBackground == 0) {
+                wait(NULL);
+            }
+            printf("PADRE\n");
+        }
+        /*
             if(command_list[command_count].isBackground == 0 && command_list[command_count].isRedirection == 0) {
                 // can just call execvp and execute
                 char *myargs[3];
@@ -218,22 +281,25 @@ int main(int argc, char *argv[]) {
                         myargs[1] = NULL;
                     }
                 }
-                myargs[0] = strdup("ls");  
-                myargs[1] = NULL;  
-                //myargs[3] = NULL;  
-                //myargs[3] = NULL;       	
-                printf("prima\n");
-                execvp(myargs[0], (const char* const*) myargs);
-                printf("dopo\n");
-            }/*
-        } else { // shell
-            
-        }*/
 
-        //print_command(&command_list[command_count]);
+                execvp(myargs[0], myargs);
+            }*/
+
+
+
         command_count++;
 
     }
+    printf("\nfine\n");
+    // restore default STDIN and STDOUT
+    /*if (command_list[command_count].isRedirection == 1) {
+        int stdin_fd = dup(STDIN_FILENO);
+        int stdout_fd = dup(STDOUT_FILENO);
+
+        dup2(stdin_fd, STDIN_FILENO);
+        dup2(stdout_fd, STDOUT_FILENO);
+        printf("Restored!\n");
+    }*/
 
     fclose(commands_file);
     fclose(parse_file);

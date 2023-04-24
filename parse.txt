@@ -3,61 +3,26 @@ Command: ls
 Inputs: 
 Option: -l
 Redirection: >
-Background: y
+Background: n
+----------
+----------
+Command: grep
+Inputs: command
+Option: 
+Redirection: <
+Background: n
 ----------
 ----------
 Command: wc
-Inputs: output1.txt
-Option: 
-Redirection: -
-Background: n
-----------
-----------
-Command: ls
-Inputs: 
-Option: -a
-Redirection: -
-Background: n
-----------
-----------
-Command: man
-Inputs: 
-Option: -f
-Redirection: -
-Background: n
-----------
-----------
-Command: grep
-Inputs: sample
-Option: 
-Redirection: <
-Background: n
-----------
-----------
-Command: ls
-Inputs: −l
+Inputs: commands.txt
 Option: 
 Redirection: >
-Background: y
-----------
-----------
-Command: man
-Inputs: cat
-Option: 
-Redirection: -
 Background: n
 ----------
 ----------
 Command: grep
-Inputs: rwx
+Inputs: command
 Option: 
 Redirection: <
-Background: y
-----------
-----------
-Command: wait
-Inputs: 
-Option: 
-Redirection: -
 Background: n
 ----------
