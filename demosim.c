@@ -15,7 +15,6 @@ sem_t demo_s; // sem for demo student
 sem_t ready_a; // sem for demo assistant
 sem_t end_s; // sem for demo end students
 sem_t leaving_a; // sem for leaving assistannts
-pthread_barrier_t barrier; // barrier to synch demos
 
 int student_count = 0; // number of students currently in the room
 int assistant_count = 0; // number of assistants currently in the room
@@ -132,7 +131,6 @@ int main(int argc, char *argv[]) {
 		sem_init(&demo_s, 0, 0);
 		sem_init(&demo_a, 0, 0);
 		sem_init(&leaving_a, 0, 0);
-		pthread_barrier_init(&barrier, NULL, 3);
 
 		// create students
 		for(int i=0; i<num_s; i++) {
