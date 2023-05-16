@@ -27,7 +27,9 @@ void* assistant_func() {
 	pthread_mutex_lock(&lock);
 	printf("Thread ID: %ld, Role:Assistant, I entered the classroom.\n", pthread_self());
 	assistant_count++;
-	sem_post(&join_leave);
+	if(student_count <= ((assistant_count*3)-1)) {
+		sem_post(&join_leave);
+	}
 	pthread_mutex_unlock(&lock);
 
 	sem_wait(&demo_a); // assistant waits for 2 students before ending the democd 
